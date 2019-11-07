@@ -16,7 +16,11 @@ public protocol Peepable {
 
 public struct Peep {
     public static func play(sound: Peepable?) {
-        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, with: .mixWithOthers)
+        if #available(iOS 10.0, *) {
+            try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default, options: .mixWithOthers)
+        } else {
+            try? AVAudioSession.sharedInstance().setCategory(.ambient, options: .mixWithOthers)
+        }
         sound?.play()
     }
 }
